@@ -1,0 +1,12 @@
+.git
+.venv
+__pycache__
+.pytest_cache
+.ruff_cache
+*.db
+*.db-*
+*.sqlite*
+.env
+.env.*
+tests
+INTERVIEW_NOTES.md
