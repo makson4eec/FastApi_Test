@@ -1,4 +1,5 @@
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pytest
 from fastapi.testclient import TestClient
@@ -7,6 +8,16 @@ from sqlalchemy import func, select
 from app.config import Settings
 from app.main import create_app
 from app.models import Payment
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_configure(config: pytest.Config) -> None:
+    if config.option.basetemp is not None:
+        return
+    # A shared pytest-of-<user> directory can belong to another Windows account.
+    temporary = TemporaryDirectory(prefix="kvitto-pytest-")
+    config.option.basetemp = str(Path(temporary.name) / "tests")
+    config.add_cleanup(temporary.cleanup)
 
 
 @pytest.fixture
